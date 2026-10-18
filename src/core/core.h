@@ -1,4 +1,4 @@
 #pragma once
 
 void shutdown();
-void initButtonEvents();
+void core_init_events();

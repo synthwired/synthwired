@@ -1,0 +1,33 @@
+name: synthwired
+
+services:
+  synthwired:
+    build: docker
+    image: synthwired-dev
+    init: true
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    working_dir: /work
+    environment:
+      FLASHER_HOST: 0.0.0.0
+      FLASHER_PORT: 8080
+      DISPLAY: ${DISPLAY:-:0}
+    volumes:
+      - work:/work
+      - pio:/pio
+      - ./src:/work/src:ro
+      - ./data:/work/data:ro
+      - ./boards:/work/boards:ro
+      - ./variants:/work/variants:ro
+      - ./scripts:/work/scripts:ro
+      - ./docker:/work/docker:ro
+      - ./platformio.ini:/work/platformio.ini:ro
+      - ./Makefile:/work/Makefile:ro
+      - ./.clang-format:/work/.clang-format:ro
+      - ./.clang-tidy:/work/.clang-tidy:ro
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+    ports:
+      - "127.0.0.1:${FLASHER_PORT:-8080}:8080"
+
+volumes:
+  work:
+  pio:

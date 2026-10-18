@@ -1,7 +1,7 @@
 #include "lock.h"
 static bool locked = true;
 
-bool ui_locked()
+bool is_ui_locked()
 {
 	return locked;
 }

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>SynthWired – Flasher</title>
+	<link rel="stylesheet" href="/style.css">
+	<script type="module" src="/flasher.js"></script>
+</head>
+<body>
+	<header class="page-header">
+		<h1><img src="/logo.png" alt="SynthWired" width="436" height="96"></h1>
+		<nav>
+			<a href="/" aria-current="page">Flasher</a>
+		</nav>
+	</header>
+
+	<main>
+		<p id="unsupported" class="notice" hidden>
+			Web Serial is not available in this browser. Use Firefox 151+, Chrome, Edge or Opera.
+		</p>
+
+		<div id="linux-snap" class="info" hidden>
+			<p>
+				On Linux, Chromium installed as a snap does not see any serial ports until USB access is allowed.
+				Run this once, then restart Chromium completely:
+			</p>
+			<pre><code>sudo snap connect chromium:raw-usb</code></pre>
+			<p>
+				Snap runs Chromium in a sandbox that blocks access to hardware. The command connects the
+				<code>raw-usb</code> interface, which Chromium already declares, so the sandbox allows USB devices
+				including USB serial ports. It needs <code>sudo</code> because it changes the sandbox permissions.
+				A page still gets only the device you pick in the browser dialog. It can be undone with
+				<code>sudo snap disconnect chromium:raw-usb</code>.
+			</p>
+			<ul>
+				<li><a href="https://snapcraft.io/docs/raw-usb-interface" target="_blank" rel="noopener">Snapcraft: the raw-usb interface</a></li>
+				<li><a href="https://snapcraft.io/docs/interface-management" target="_blank" rel="noopener">Snapcraft: interface management</a></li>
+				<li><a href="https://developer.chrome.com/docs/capabilities/serial" target="_blank" rel="noopener">Chrome: Web Serial API</a></li>
+			</ul>
+		</div>
+
+		<section class="card">
+			<h2>Actions</h2>
+			<div class="actions">
+				<button type="button" data-action="build-firmware">Build firmware</button>
+				<button type="button" class="primary" data-action="upload-firmware">Build &amp; upload firmware</button>
+				<button type="button" data-action="upload-firmware-filesystem">Build &amp; upload firmware + filesystem</button>
+				<button type="button" data-action="upload-full">Full upload</button>
+			</div>
+			<label class="option">
+				<input id="monitor-after-flash" type="checkbox" checked>
+				Open serial monitor after upload
+			</label>
+			<p class="muted">
+				Full upload writes the bootloader, the partition table, the firmware and the filesystem.
+				It erases saved settings. Use it for a new watch.
+			</p>
+			<progress id="progress" max="1" value="0"></progress>
+		</section>
+
+		<section class="card">
+			<h2>Watch</h2>
+			<div class="row">
+				<button id="select-port" type="button">Select watch</button>
+				<span id="port-status" class="muted">No watch selected</span>
+			</div>
+		</section>
+
+		<section class="card">
+			<h2>Images</h2>
+			<table id="images">
+				<thead>
+					<tr>
+						<th>Image</th>
+						<th>File</th>
+						<th>Address</th>
+						<th>Size</th>
+						<th>Built</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</section>
+
+		<section class="card">
+			<div class="row">
+				<h2>Console</h2>
+				<button id="monitor" type="button">Start monitor</button>
+				<button id="clear" type="button">Clear</button>
+			</div>
+			<pre id="console"></pre>
+		</section>
+	</main>
+</body>
+</html>

@@ -930,6 +930,9 @@
 /*1: Enable an observer pattern implementation*/
 #define LV_USE_OBSERVER 1
 
+#define LV_USE_XML 1
+#define LV_USE_OBJ_NAME 1
+
 /*1: Enable Pinyin input method*/
 /*Requires: lv_keyboard*/
 #define LV_USE_IME_PINYIN 0

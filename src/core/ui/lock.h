@@ -2,4 +2,4 @@
 
 void ui_lock();
 void ui_unlock();
-bool ui_locked();
+bool is_ui_locked();

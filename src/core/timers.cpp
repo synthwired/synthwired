@@ -3,29 +3,27 @@
 #include <lvgl.h>
 #include "ui/ui.h"
 
-lv_timer_t * timer_second;
-lv_timer_t * timer_minute;
+static lv_timer_t *timer_second = nullptr;
+static lv_timer_t *timer_minute = nullptr;
 
-void timer_second_run(lv_timer_t * timer)
+void timer_second_run(lv_timer_t *)
 {
-	if (UI::getAppOnScreen())
-	{
-		UI::getAppOnScreen()->everySecond();
+	if (UI::getActiveScreen() != nullptr) {
+		UI::getActiveScreen()->everySecond();
 	}
-};
-void timer_minute_run(lv_timer_t * timer)
-{
-	if (UI::getAppOnScreen())
-	{
-		UI::getAppOnScreen()->everyMinute();
-	}
-};
+}
 
+static void timer_minute_run(lv_timer_t *)
+{
+	if (UI::getActiveScreen() != nullptr) {
+		UI::getActiveScreen()->everyMinute();
+	}
+}
 
 void init_timers()
 {
-	timer_second = lv_timer_create(timer_second_run, 1000, NULL);
-	timer_minute = lv_timer_create(timer_minute_run, 60 * 1000, NULL);
+	timer_second = lv_timer_create(timer_second_run, 1000, nullptr);
+	timer_minute = lv_timer_create(timer_minute_run, 60 * 1000, nullptr);
 }
 
 void pause_timers()

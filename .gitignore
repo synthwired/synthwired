@@ -1,1 +1,6 @@
 .pio
+managed_components
+.dummy
+compile_commands.json
+.vscode
+.idea

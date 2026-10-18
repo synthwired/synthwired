@@ -1,4 +1,4 @@
 #pragma once
 
-void activity_mark();
-bool activity_check();
+void activity_mark(bool tiltOn = false);
+bool is_active();
