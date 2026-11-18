@@ -1,0 +1,48 @@
+name: Clang checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format-check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: docker
+          tags: synthwired-dev
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/pio
+            .pio/libdeps
+          key: pio-${{ runner.os }}-${{ hashFiles('platformio.ini', 'sdkconfig.*') }}
+          restore-keys: pio-${{ runner.os }}-
+
+      - name: Run clang-format, clang-tidy and project checks
+        run: |
+          mkdir -p ~/pio
+          docker run --rm \
+            -u "$(id -u):$(id -g)" \
+            -v "$PWD:/work" \
+            -v "$HOME/pio:/pio" \
+            synthwired-dev \
+            sh -c "make build && make format-check"

@@ -51,11 +51,16 @@ def get_clang_entry(entry, system_includes):
     }
 
 
+def is_project_source(entry):
+    path = os.path.relpath(os.path.join(entry["directory"], entry["file"]), entry["directory"])
+    return path.startswith("src/")
+
+
 source_path = sys.argv[1]
 target_path = sys.argv[2]
 
 with open(source_path) as source_file:
-    entries = [entry for entry in json.load(source_file) if entry["file"].startswith("src/")]
+    entries = [entry for entry in json.load(source_file) if is_project_source(entry)]
 
 system_includes = get_system_includes(get_arguments(entries[0])[0])
 

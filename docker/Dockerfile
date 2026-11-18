@@ -29,6 +29,11 @@ RUN python3 -m venv /opt/venv \
 		platformio==${PLATFORMIO_VERSION} \
 		pillow
 
+RUN printf 'pioarduino==6.2.0\n' > /opt/pio-constraints.txt
+
+ENV UV_CONSTRAINT=/opt/pio-constraints.txt \
+	PIP_CONSTRAINT=/opt/pio-constraints.txt
+
 RUN mkdir -p /opt/esptool-js \
 	&& curl -fsSL https://registry.npmjs.org/esptool-js/-/esptool-js-${ESPTOOL_JS_VERSION}.tgz \
 		| tar xz -C /opt/esptool-js --strip-components=1 package/bundle.js package/LICENSE
